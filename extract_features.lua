@@ -49,7 +49,8 @@ end
 local function main()
   local opt = cmd:parse(arg)
   assert(opt.input_txt ~= '', 'Must provide -input_txt')
-  assert(opt.output_t7 ~= '', 'Must provide -output_t7')
+  assert(opt.features_t7 ~= '', 'Must provide -features_t7')
+  assert(opt.boxes_t7 ~= '', 'Must provide -boxes_t7')
   
   -- Read the text file of image paths
   local image_paths = {}
