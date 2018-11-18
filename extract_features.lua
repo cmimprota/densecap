@@ -1,7 +1,7 @@
 require 'torch'
 require 'nn'
 require 'image'
-require 'hdf5'
+--require 'hdf5'
 
 require 'densecap.DenseCapModel'
 local utils = require 'densecap.utils'
@@ -21,10 +21,12 @@ cmd:option('-boxes_per_image', 100)
 
 cmd:option('-input_txt', '')
 cmd:option('-max_images', 0)
-cmd:option('-output_h5', '')
+--cmd:option('-output_h5', '')
+cmd:option('-features_t7', '')
+cmd:option('-boxes_t7', '')
 
-cmd:option('-gpu', 0)
-cmd:option('-use_cudnn', 1)
+cmd:option('-gpu', -1)
+cmd:option('-use_cudnn', -1)
 
 
 local function run_image(model, img_path, opt, dtype)
@@ -47,7 +49,7 @@ end
 local function main()
   local opt = cmd:parse(arg)
   assert(opt.input_txt ~= '', 'Must provide -input_txt')
-  assert(opt.output_h5 ~= '', 'Must provide -output_h5')
+  assert(opt.output_t7 ~= '', 'Must provide -output_t7')
   
   -- Read the text file of image paths
   local image_paths = {}
@@ -89,12 +91,17 @@ local function main()
     all_boxes[i]:copy(boxes[{{1, M}}])
     all_feats[i]:copy(feats[{{1, M}}])
   end
-
+  
   -- Write data to the HDF5 file
-  local h5_file = hdf5.open(opt.output_h5)
-  h5_file:write('/feats', all_feats)
-  h5_file:write('/boxes', all_boxes)
-  h5_file:close()
+  --[[
+    local h5_file = hdf5.open(opt.output_h5)
+    h5_file:write('/feats', all_feats)
+    h5_file:write('/boxes', all_boxes)
+    h5_file:close()
+  ]]--
+  torch.save(opt.features_t7, all_feats)
+  torch.save(opt.boxes_t7, all_boxes)
+
 end
 
 main()
