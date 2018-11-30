@@ -1,7 +1,7 @@
 require 'torch'
 require 'nn'
 require 'image'
-require 'hdf5'
+--require 'hdf5'
 
 require 'densecap.DenseCapModel'
 local utils = require 'densecap.utils'
